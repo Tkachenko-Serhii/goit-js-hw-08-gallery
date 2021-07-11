@@ -69,12 +69,13 @@ const refs = {
   lightboxContainer: document.querySelector(".js-lightbox"),
   closeModalBtn: document.querySelector("[data-action='close-lightbox']"),
   modalImg: document.querySelector(".lightbox__image"),
+  overlay: document.querySelector(".lightbox__overlay"),
 };
 
 const galleryItemMurkup = createGalleryListItem(galleryItems);
 
 refs.galleryContainer.insertAdjacentHTML("beforeend", galleryItemMurkup);
-
+refs.overlay.addEventListener("click", removeModalOpenClass);
 refs.galleryContainer.addEventListener("click", onGalleryContainerClick);
 refs.closeModalBtn.addEventListener("click", removeModalOpenClass);
 
@@ -82,8 +83,7 @@ function createGalleryListItem(galleryItems) {
   return galleryItems
     .map(({ preview, original, description }) => {
       return `<li class="gallery__item">
-    <a class="gallery__link" href="${original}"><img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}"/></a>
-    </li>`;
+    <a class="gallery__link" href="${original}"><img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}"/></a></li>`;
     })
     .join("");
 }
@@ -107,6 +107,12 @@ function onGalleryContainerClick(e) {
 function addModalOpenClass(modal) {
   modal.classList.add("is-open");
 }
+
+window.addEventListener("keydown", function (e) {
+  if (e.code === "Escape") {
+    removeModalOpenClass();
+  }
+});
 
 function removeModalOpenClass() {
   refs.lightboxContainer.classList.remove("is-open");
