@@ -72,6 +72,8 @@ const refs = {
   overlay: document.querySelector(".lightbox__overlay"),
 };
 
+let IMG_IDX = 0;
+window.addEventListener("keydown", nextImage);
 const galleryItemMurkup = createGalleryListItem(galleryItems);
 
 refs.galleryContainer.insertAdjacentHTML("beforeend", galleryItemMurkup);
@@ -118,4 +120,25 @@ function removeModalOpenClass() {
   refs.lightboxContainer.classList.remove("is-open");
   refs.modalImg.src = "";
   refs.modalImg.alt = "";
+}
+
+function nextImage(e) {
+  switch (e.code) {
+    case "ArrowRight":
+      IMG_IDX += 1;
+      if (IMG_IDX === galleryItems.length) {
+        IMG_IDX = 0;
+      }
+      refs.modalImg.src = galleryItems[IMG_IDX].original;
+      refs.modalImg.alt = galleryItems[IMG_IDX].description;
+      break;
+    case "ArrowLeft":
+      IMG_IDX -= 1;
+      if (IMG_IDX < 0) {
+        IMG_IDX = galleryItems.length - 1;
+      }
+      refs.modalImg.src = galleryItems[IMG_IDX].original;
+      refs.modalImg.alt = galleryItems[IMG_IDX].description;
+      break;
+  }
 }
